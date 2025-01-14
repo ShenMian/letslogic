@@ -14,10 +14,10 @@ A library providing interaction with the [Let's Logic API].
 
 ## Features
 
-- [X] Get collection list.
-- [X] Get levels in collection.
-- [X] Submit level solution.
-- [ ] Get records for completed levels.
+- Get collection list.
+- Get levels in collection.
+- Submit level solution.
+- Get records for completed levels.
 
 ## License
 

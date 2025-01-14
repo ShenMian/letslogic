@@ -2,12 +2,43 @@ mod collection;
 mod error;
 mod level;
 
+use std::{
+    collections::HashMap,
+    io::{Cursor, Read},
+};
+
+use serde::{Deserialize, Serialize};
+use serde_json as json;
+use zip::ZipArchive;
+
 pub use collection::*;
 pub use error::*;
 pub use level::*;
 
-use serde::{Deserialize, Serialize};
-use serde_json as json;
+#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
+pub struct SubmitResult {
+    result: String,
+    #[serde(rename = "blue")]
+    best_move: Record,
+    #[serde(rename = "green")]
+    best_push: Record,
+}
+
+#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
+pub struct Record {
+    rank: i32,
+    points: i32,
+    moves: i32,
+    pushes: i32,
+}
+
+#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
+pub struct LevelRecord {
+    #[serde(rename = "blue")]
+    best_move: Record,
+    #[serde(rename = "green")]
+    best_push: Record,
+}
 
 pub async fn fetch_collections(api_key: &str) -> Result<Vec<Collection>, Error> {
     let url = format!("https://letslogic.com/api/v1/collections?key={api_key}");
@@ -38,23 +69,6 @@ pub async fn fetch_levels_by_collection_id(
     Ok(levels)
 }
 
-#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
-pub struct SubmitResult {
-    result: String,
-    #[serde(rename = "blue")]
-    best_move: Record,
-    #[serde(rename = "green")]
-    best_push: Record,
-}
-
-#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
-pub struct Record {
-    rank: i32,
-    points: i32,
-    moves: i32,
-    pushes: i32,
-}
-
 pub async fn submit_solution(
     api_key: &str,
     level_id: i32,
@@ -75,4 +89,22 @@ pub async fn submit_solution(
 
     let result = json::from_value(json).unwrap();
     Ok(result)
+}
+
+pub async fn get_all_records(api_key: &str) -> Result<HashMap<i32, LevelRecord>, Error> {
+    let url = format!("https://letslogic.com/api/v1/records?key={api_key}");
+    let response = reqwest::get(url).await?;
+
+    let content = Cursor::new(response.bytes().await?);
+    let mut archive = ZipArchive::new(content).expect("failed to open zip archive");
+    let mut json_file = archive
+        .by_index(0)
+        .expect("failed to get file from zip archive");
+
+    let mut buf = String::new();
+    json_file.read_to_string(&mut buf).unwrap();
+    dbg!(&buf);
+
+    let records: HashMap<i32, LevelRecord> = json::from_str(&buf)?;
+    Ok(records)
 }
