@@ -28,7 +28,4 @@ Licensed under either of
 
 at your option.
 
-The level files in the `assets` directory are licensed solely under
-their respective licenses, available in the `LICENSE` file in the directory.
-
 [Let's Logic API]: <https://letslogic.com/api>
