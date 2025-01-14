@@ -41,8 +41,10 @@ pub async fn fetch_levels_by_collection_id(
 #[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
 pub struct SubmitResult {
     result: String,
-    blue: SubmitResultDetails,
-    green: SubmitResultDetails,
+    #[serde(rename = "blue")]
+    best_move: Record,
+    #[serde(rename = "green")]
+    best_push: Record,
 }
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
