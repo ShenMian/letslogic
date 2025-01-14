@@ -48,7 +48,7 @@ pub struct SubmitResult {
 }
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
-pub struct SubmitResultDetails {
+pub struct Record {
     rank: i32,
     points: i32,
     moves: i32,
