@@ -42,9 +42,13 @@ jobs:
 
       - name: Test
         run: cargo test --release -- --test-threads 1
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
 
       - name: Generate code coverage
         run: cargo llvm-cov --all-features --no-cfg-coverage --workspace --lcov --output-path lcov.info -- --test-threads 1
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
