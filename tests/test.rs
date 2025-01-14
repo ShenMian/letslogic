@@ -1,36 +1,40 @@
 #[cfg(test)]
 mod tests {
-
     use letslogic::*;
 
-    /// WARNING: Exposing this API key does not cause serious security issues
-    const API_KEY: &str = "455f618bab67eee03fc35f32a984b57d8afc789c45527e1820e365acac445623";
+    fn get_api_key() -> String {
+        dotenv::dotenv().ok();
+        std::env::var("API_KEY").expect("failed to get envniroment variable API_KEY")
+    }
 
     #[tokio::test]
     async fn test_fetch_collections() {
-        let collections = fetch_collections(API_KEY).await.unwrap();
+        let collections = fetch_collections(&get_api_key()).await.unwrap();
         assert!(!collections.is_empty());
     }
 
     #[tokio::test]
     async fn test_fetch_levels() {
-        let levels = fetch_levels_by_collection_id(API_KEY, 1).await.unwrap();
+        let levels = fetch_levels_by_collection_id(&get_api_key(), 1)
+            .await
+            .unwrap();
         assert!(!levels.is_empty());
     }
 
     #[tokio::test]
     async fn test_submit_solution() {
+        let api_key = get_api_key();
         assert!(matches!(
-            submit_solution(API_KEY, 1, "R").await,
+            submit_solution(&api_key, 1, "R").await,
             Err(Error::SubmitSolution(SubmitSolutionError::InvalidLevelId))
         ));
 
         assert!(matches!(
-            submit_solution(API_KEY, 3000, "R").await,
+            submit_solution(&api_key, 3000, "R").await,
             Err(Error::SubmitSolution(SubmitSolutionError::InvalidSolution))
         ));
 
-        assert!(submit_solution(API_KEY, 3000, "uuUdrruurrdDLLLrrdLrdrU")
+        assert!(submit_solution(&api_key, 3000, "uuUdrruurrdDLLLrrdLrdrU")
             .await
             .is_ok());
     }
