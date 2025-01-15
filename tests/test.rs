@@ -41,6 +41,6 @@ async fn submit_solution() {
 
 #[tokio::test]
 async fn get_all_records() {
-    let api_key = get_api_key();
-    assert!(letslogic::fetch_all_records(&api_key).await.is_ok());
+    let records = letslogic::fetch_all_records(&get_api_key()).await.unwrap();
+    assert!(!records.is_empty());
 }
