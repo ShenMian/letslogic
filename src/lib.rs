@@ -25,14 +25,6 @@ pub struct SubmitResult {
 }
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
-pub struct Record {
-    rank: i32,
-    points: i32,
-    moves: i32,
-    pushes: i32,
-}
-
-#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
 pub struct LevelRecord {
     #[serde(rename = "blue")]
     best_move: Record,
@@ -40,6 +32,15 @@ pub struct LevelRecord {
     best_push: Record,
 }
 
+#[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
+pub struct Record {
+    rank: i32,
+    points: i32,
+    moves: i32,
+    pushes: i32,
+}
+
+/// Let's Logic API: Get collection list.
 pub async fn fetch_collections(api_key: &str) -> Result<Vec<Collection>, Error> {
     let url = "https://letslogic.com/api/v1/collections";
     let client = reqwest::Client::new();
@@ -54,6 +55,7 @@ pub async fn fetch_collections(api_key: &str) -> Result<Vec<Collection>, Error> 
     Ok(collections)
 }
 
+/// Let's Logic API: Get levels in collection.
 pub async fn fetch_levels_by_collection_id(
     api_key: &str,
     collection_id: i32,
@@ -71,6 +73,7 @@ pub async fn fetch_levels_by_collection_id(
     Ok(levels)
 }
 
+/// Let's Logic API: Submit level solution.
 pub async fn submit_solution(
     api_key: &str,
     level_id: i32,
@@ -97,6 +100,7 @@ pub async fn submit_solution(
     Ok(result)
 }
 
+/// Let's Logic API: Get records for completed levels.
 pub async fn get_all_records(api_key: &str) -> Result<HashMap<i32, LevelRecord>, Error> {
     let url = "https://letslogic.com/api/v1/records";
     let client = reqwest::Client::new();
