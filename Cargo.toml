@@ -3,6 +3,14 @@ name = "letslogic"
 version = "0.1.0"
 edition = "2021"
 
+authors = ["ShenMian <sms_school@outlook.com>"]
+license = "MIT OR Apache-2.0"
+
+description = "A library providing interaction with the Let's Logic API"
+repository = "https://github.com/ShenMian/letslogic"
+keywords = ["sokoban"]
+categories = ["api-bindings", "asynchronous"]
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 reqwest = { version = "0.12", features = ["json"] }
