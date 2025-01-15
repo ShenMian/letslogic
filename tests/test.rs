@@ -7,8 +7,13 @@ fn get_api_key() -> String {
 
 #[tokio::test]
 async fn fetch_collections() {
-    let collections = letslogic::fetch_collections(&get_api_key()).await.unwrap();
+    let api_key = get_api_key();
+
+    let collections = letslogic::fetch_collections(&api_key).await.unwrap();
     assert!(!collections.is_empty());
+
+    let levels = collections[0].fetch_levels(&api_key).await.unwrap();
+    assert!(!levels.is_empty());
 }
 
 #[tokio::test]
@@ -22,6 +27,7 @@ async fn fetch_levels() {
 #[tokio::test]
 async fn submit_solution() {
     let api_key = get_api_key();
+
     assert!(matches!(
         letslogic::submit_solution(&api_key, 1, "R").await,
         Err(SubmitSolutionError::InvalidLevelId)
