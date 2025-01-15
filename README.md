@@ -6,18 +6,17 @@
 
 A library providing interaction with the [Let's Logic API].
 
-> [!WARNING]
->
-> - The request implementation uses GET instead of POST.
-> - Let's Logic API may incorrectly return empty responses.
-> - Avoid concurrent requests.
-
 ## Features
 
 - Get collection list.
 - Get levels in collection.
 - Submit level solution.
 - Get records for completed levels.
+
+> [!WARNING]
+>
+> - Let's Logic API may incorrectly return empty responses.
+> - Avoid concurrent requests.
 
 ## License
 
