@@ -1,4 +1,4 @@
-use letslogic::*;
+use letslogic::error::*;
 
 fn get_api_key() -> String {
     dotenv::dotenv().ok();
@@ -6,39 +6,41 @@ fn get_api_key() -> String {
 }
 
 #[tokio::test]
-async fn test_fetch_collections() {
-    let collections = fetch_collections(&get_api_key()).await.unwrap();
+async fn fetch_collections() {
+    let collections = letslogic::fetch_collections(&get_api_key()).await.unwrap();
     assert!(!collections.is_empty());
 }
 
 #[tokio::test]
-async fn test_fetch_levels() {
-    let levels = fetch_levels_by_collection_id(&get_api_key(), 1)
+async fn fetch_levels() {
+    let levels = letslogic::fetch_levels_by_collection_id(&get_api_key(), 1)
         .await
         .unwrap();
     assert!(!levels.is_empty());
 }
 
 #[tokio::test]
-async fn test_submit_solution() {
+async fn submit_solution() {
     let api_key = get_api_key();
     assert!(matches!(
-        submit_solution(&api_key, 1, "R").await,
+        letslogic::submit_solution(&api_key, 1, "R").await,
         Err(SubmitSolutionError::InvalidLevelId)
     ));
 
     assert!(matches!(
-        submit_solution(&api_key, 3000, "R").await,
+        letslogic::submit_solution(&api_key, 3000, "R").await,
         Err(SubmitSolutionError::InvalidSolution)
     ));
 
-    assert!(submit_solution(&api_key, 3000, "uuUdrruurrdDLLLrrdLrdrU")
-        .await
-        .is_ok());
+    assert!(
+        letslogic::submit_solution(&api_key, 3000, "uuUdrruurrdDLLLrrdLrdrU")
+            .await
+            .is_ok()
+    );
 }
 
 #[tokio::test]
-async fn test_get_all_records() {
+async fn get_all_records() {
     let api_key = get_api_key();
-    assert!(fetch_all_records(&api_key).await.is_ok());
+    assert!(letslogic::fetch_all_records(&api_key).await.is_ok());
 }

@@ -1,5 +1,5 @@
 mod collection;
-mod error;
+pub mod error;
 mod level;
 
 use std::{
@@ -12,7 +12,7 @@ use serde_json as json;
 use zip::ZipArchive;
 
 pub use collection::*;
-pub use error::*;
+use error::*;
 pub use level::*;
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
@@ -43,16 +43,18 @@ pub struct Record {
 /// Let's Logic API: Get collection list.
 pub async fn fetch_collections(api_key: &str) -> Result<Vec<Collection>, FetchError> {
     let url = "https://letslogic.com/api/v1/collections";
-    let client = reqwest::Client::new();
-    let response = client.post(url).form(&[("key", api_key)]).send().await?;
+    let response = reqwest::Client::new()
+        .post(url)
+        .form(&[("key", api_key)])
+        .send()
+        .await?;
     let json: json::Value = json::from_slice(&response.bytes().await?)?;
 
     if let Some(msg) = json.get("error") {
         return Err(FetchError::Api(msg.to_string()));
     }
 
-    let collections = json::from_value(json)?;
-    Ok(collections)
+    Ok(json::from_value(json)?)
 }
 
 /// Let's Logic API: Get levels in collection.
@@ -61,16 +63,18 @@ pub async fn fetch_levels_by_collection_id(
     collection_id: i32,
 ) -> Result<Vec<Level>, FetchError> {
     let url = format!("https://letslogic.com/api/v1/collection/{collection_id}");
-    let client = reqwest::Client::new();
-    let response = client.post(url).form(&[("key", api_key)]).send().await?;
+    let response = reqwest::Client::new()
+        .post(url)
+        .form(&[("key", api_key)])
+        .send()
+        .await?;
     let json: json::Value = json::from_slice(&response.bytes().await?)?;
 
     if let Some(msg) = json.get("error") {
         return Err(FetchError::Api(msg.to_string()));
     }
 
-    let levels = json::from_value(json)?;
-    Ok(levels)
+    Ok(json::from_value(json)?)
 }
 
 /// Let's Logic API: Submit level solution.
@@ -80,8 +84,7 @@ pub async fn submit_solution(
     solution: &str,
 ) -> Result<SubmitSolutionResult, SubmitSolutionError> {
     let url = format!("https://letslogic.com/api/v1/level/{level_id}");
-    let client = reqwest::Client::new();
-    let response = client
+    let response = reqwest::Client::new()
         .post(url)
         .form(&[("key", api_key), ("solution", solution)])
         .send()
@@ -96,8 +99,7 @@ pub async fn submit_solution(
         };
     }
 
-    let result = json::from_value(json)?;
-    Ok(result)
+    Ok(json::from_value(json)?)
 }
 
 /// Let's Logic API: Get records for completed levels.
@@ -105,8 +107,11 @@ pub async fn fetch_all_records(
     api_key: &str,
 ) -> Result<HashMap<i32, LevelRecord>, FetchRecordsError> {
     let url = "https://letslogic.com/api/v1/records";
-    let client = reqwest::Client::new();
-    let response = client.post(url).form(&[("key", api_key)]).send().await?;
+    let response = reqwest::Client::new()
+        .post(url)
+        .form(&[("key", api_key)])
+        .send()
+        .await?;
 
     let content = Cursor::new(response.bytes().await?);
     let mut archive = ZipArchive::new(content)?;
@@ -117,6 +122,5 @@ pub async fn fetch_all_records(
         .read_to_string(&mut buf)
         .expect("failed to read file");
 
-    let records = json::from_str(&buf)?;
-    Ok(records)
+    Ok(json::from_str(&buf)?)
 }

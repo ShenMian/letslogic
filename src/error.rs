@@ -16,10 +16,10 @@ pub enum SubmitSolutionError {
     Reqwest(#[from] reqwest::Error),
     #[error(transparent)]
     Json(#[from] serde_json::Error),
-    #[error("invalid solution")]
-    InvalidSolution,
     #[error("invalid level id")]
     InvalidLevelId,
+    #[error("invalid solution")]
+    InvalidSolution,
     #[error("{0}")]
     Api(String),
 }
