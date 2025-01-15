@@ -10,10 +10,14 @@ pub struct Level {
     title: String,
     author: Option<String>,
     map: String,
-    blue_moves: Option<i32>,
-    blue_pushes: Option<i32>,
-    green_moves: Option<i32>,
-    green_pushes: Option<i32>,
+    #[serde(rename = "blue_moves")]
+    best_move_moves: Option<i32>,
+    #[serde(rename = "blue_pushes")]
+    best_move_pushes: Option<i32>,
+    #[serde(rename = "green_moves")]
+    best_push_moves: Option<i32>,
+    #[serde(rename = "green_pushes")]
+    best_push_pushes: Option<i32>,
 }
 
 impl Level {
