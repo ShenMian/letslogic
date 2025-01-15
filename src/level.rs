@@ -59,32 +59,44 @@ mod tests {
     #[test]
     fn xsb() {
         let level = Level {
-            id: 681,
-            height: 9,
-            width: 9,
-            title: "Jason's Cave".to_string(),
-            author: Some("Blizzard".to_string()),
-            map:
-                "111111111100000001100230301111111001104441301104111001100000301100000001111111111"
-                    .to_string(),
-            best_move_moves: Some(105),
-            best_move_pushes: Some(38),
-            best_push_moves: Some(105),
-            best_push_pushes: Some(38),
+            id: 100089,
+            height: 13,
+            width: 13,
+            title: "简单休闲系列".to_string(),
+            author: Some(
+                "闲(XIAN)".to_string(),
+            ),
+            map: "7111111111111710400304032171314134043317105043510401710530503014111001034311011044143041031133040430400114530504334011001304143341104053040030110000501111111111111177777".to_string(),
+            best_move_moves: Some(
+                265,
+            ),
+            best_move_pushes: Some(
+                101,
+            ),
+            best_push_moves: Some(
+                395,
+            ),
+            best_push_pushes: Some(
+                73,
+            ),
         };
         assert_eq!(
             level.xsb(),
             indoc! {"
-            #########
-            #       #
-            #  @$ $ #
-            ######  #
-            # ...#$ #
-            # .###  #
-            #     $ #
-            #       #
-            #########
-        "}
+                _############
+                _# .  $ . $@#
+                _#$#.#$. .$$#
+                _# * .$*# . #
+                _# *$ * $ #.#
+                ##  # $.$## #
+                # ..#.$ .# $#
+                #$$ . .$ .  #
+                #.*$ * .$$. #
+                #  #$ .#.$$.#
+                # . *$ .  $ #
+                #    * ######
+                ########_____
+            "}
         );
     }
 }
