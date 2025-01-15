@@ -110,7 +110,6 @@ pub async fn get_all_records(api_key: &str) -> Result<HashMap<i32, LevelRecord>,
 
     let mut buf = String::new();
     json_file.read_to_string(&mut buf).unwrap();
-    dbg!(&buf);
 
     let records = json::from_str(&buf)?;
     Ok(records)
