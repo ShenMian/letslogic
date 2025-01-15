@@ -50,3 +50,41 @@ impl Level {
         result
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use indoc::indoc;
+
+    #[test]
+    fn xsb() {
+        let level = Level {
+            id: 681,
+            height: 9,
+            width: 9,
+            title: "Jason's Cave".to_string(),
+            author: Some("Blizzard".to_string()),
+            map:
+                "111111111100000001100230301111111001104441301104111001100000301100000001111111111"
+                    .to_string(),
+            best_move_moves: Some(105),
+            best_move_pushes: Some(38),
+            best_push_moves: Some(105),
+            best_push_pushes: Some(38),
+        };
+        assert_eq!(
+            level.xsb(),
+            indoc! {"
+            #########
+            #       #
+            #  @$ $ #
+            ######  #
+            # ...#$ #
+            # .###  #
+            #     $ #
+            #       #
+            #########
+        "}
+        );
+    }
+}
