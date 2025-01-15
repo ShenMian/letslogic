@@ -26,23 +26,22 @@ impl Level {
     }
 
     pub fn xsb(&self) -> String {
-        let mut result =
-            String::with_capacity(self.map.len() + self.map.len() / self.width as usize);
-        for (i, c) in self.map.chars().enumerate() {
-            result.push(match c {
-                '0' => ' ',
-                '1' => '#',
-                '2' => '@',
-                '3' => '$',
-                '4' => '.',
-                '5' => '*',
-                '6' => '+',
-                '7' => '_',
+        assert!(self.map.is_ascii());
+
+        let mut result = String::new();
+        for line in self.map.as_bytes().chunks(self.width as usize) {
+            result.extend(line.iter().map(|c| match c {
+                b'0' => ' ',
+                b'1' => '#',
+                b'2' => '@',
+                b'3' => '$',
+                b'4' => '.',
+                b'5' => '*',
+                b'6' => '+',
+                b'7' => '_',
                 _ => panic!("invalid character"),
-            });
-            if (i + 1) % self.width as usize == 0 {
-                result.push('\n');
-            }
+            }));
+            result.push('\n');
         }
         result
     }
