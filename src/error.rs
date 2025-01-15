@@ -1,23 +1,35 @@
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum Error {
+pub enum FetchError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
     #[error(transparent)]
     Json(#[from] serde_json::Error),
-    #[error(transparent)]
-    SubmitSolution(#[from] SubmitSolutionError),
     #[error("{0}")]
-    Other(String),
+    Api(String),
 }
 
-#[derive(Error, Eq, PartialEq, Debug)]
+#[derive(Error, Debug)]
 pub enum SubmitSolutionError {
+    #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+    #[error(transparent)]
+    Json(#[from] serde_json::Error),
     #[error("invalid solution")]
     InvalidSolution,
     #[error("invalid level id")]
     InvalidLevelId,
     #[error("{0}")]
-    Other(String),
+    Api(String),
+}
+
+#[derive(Error, Debug)]
+pub enum FetchRecordsError {
+    #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+    #[error(transparent)]
+    Json(#[from] serde_json::Error),
+    #[error(transparent)]
+    Zip(#[from] zip::result::ZipError),
 }

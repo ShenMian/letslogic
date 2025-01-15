@@ -13,7 +13,7 @@ pub struct Collection {
 }
 
 impl Collection {
-    pub async fn fetch_levels(&self, api_key: &str) -> Result<Vec<Level>, Error> {
+    pub async fn fetch_levels(&self, api_key: &str) -> Result<Vec<Level>, FetchError> {
         fetch_levels_by_collection_id(api_key, self.id).await
     }
 }

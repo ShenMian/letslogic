@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{submit_solution, Error, SubmitResult};
+use crate::{submit_solution, SubmitSolutionError, SubmitSolutionResult};
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug, Serialize, Deserialize)]
 pub struct Level {
@@ -21,7 +21,7 @@ impl Level {
         &self,
         api_key: &str,
         solution: &str,
-    ) -> Result<SubmitResult, Error> {
+    ) -> Result<SubmitSolutionResult, SubmitSolutionError> {
         submit_solution(api_key, self.id, solution).await
     }
 

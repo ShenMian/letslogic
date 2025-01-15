@@ -24,12 +24,12 @@ async fn test_submit_solution() {
     let api_key = get_api_key();
     assert!(matches!(
         submit_solution(&api_key, 1, "R").await,
-        Err(Error::SubmitSolution(SubmitSolutionError::InvalidLevelId))
+        Err(SubmitSolutionError::InvalidLevelId)
     ));
 
     assert!(matches!(
         submit_solution(&api_key, 3000, "R").await,
-        Err(Error::SubmitSolution(SubmitSolutionError::InvalidSolution))
+        Err(SubmitSolutionError::InvalidSolution)
     ));
 
     assert!(submit_solution(&api_key, 3000, "uuUdrruurrdDLLLrrdLrdrU")
@@ -40,5 +40,5 @@ async fn test_submit_solution() {
 #[tokio::test]
 async fn test_get_all_records() {
     let api_key = get_api_key();
-    assert!(get_all_records(&api_key).await.is_ok());
+    assert!(fetch_all_records(&api_key).await.is_ok());
 }
