@@ -13,12 +13,12 @@ categories = ["api-bindings", "asynchronous"]
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
-reqwest = { version = "0.12", features = ["json"] }
+reqwest = { version = "0.13", features = ["form", "json"] }
 serde_json = "1.0"
 thiserror = "2.0"
-zip = "2.2"
+zip = "9.0"
 
 [dev-dependencies]
 dotenv = "0.15"
 indoc = "2.0"
-tokio = { version = "1.38", features = ["full"] }
+tokio = { version = "1.53", features = ["full"] }
